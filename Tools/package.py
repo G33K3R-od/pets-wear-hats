@@ -6,7 +6,7 @@ import zipfile
 
 root = pathlib.Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(root / 'Tools/validate_package.py')], check=True)
-target = pathlib.Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root.parent / 'outputs/pets-wear-hats-0.2.0-prototype.zip'
+target = pathlib.Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root.parent / 'outputs/pets-wear-hats-0.2.1-prototype.zip'
 target.parent.mkdir(parents=True, exist_ok=True)
 names = ['ModInfo.json', 'DogFit.json', 'CatFit.json', 'PigFit.json', 'ModCover.jpg', 'README.md', 'README_RU.md', 'VALIDATION.md']
 files = [root / name for name in names]

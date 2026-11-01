@@ -1,6 +1,16 @@
 using System;
 
 namespace AnimalsWearHats {
+    internal static class NativeHatIds {
+        internal const string Definition = "Obj/Equipment/Hats/Hat01";
+        internal const string Sprite = "Beings/Hats/Human/Hat01/Hat01";
+        internal static bool Matches(string id) {
+            if (string.IsNullOrEmpty(id)) return false;
+            var key = id.Substring(id.LastIndexOf('/') + 1);
+            return string.Equals(key, "Hat01", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(key, "Hat", StringComparison.OrdinalIgnoreCase);
+        }
+    }
     internal static class HatFrames {
         internal static string[] Poses(bool vertical, bool alternate) => !vertical
             ? new[] { "_H", "" } : alternate ? new[] { "_1", "" } : new[] { "" };

@@ -39,6 +39,12 @@ internal static class Tests {
         Check(HatFrames.Poses(true, true).SequenceEqual(new[] { "_1", "" }), "Walking frame falls back to base");
         Check(HatFrames.Poses(false, false).SequenceEqual(new[] { "_H", "" }), "Lying frame falls back to base");
         Check(HatFrames.Poses(false, true).SequenceEqual(new[] { "_H", "" }), "Lying ignores alternate walking state");
+        Check(NativeHatIds.Matches("Hat01") && NativeHatIds.Matches(NativeHatIds.Definition),
+            "Native Hat01 short and qualified item IDs");
+        Check(NativeHatIds.Matches("Hat") && NativeHatIds.Matches("Obj/Equipment/Hats/hat01"),
+            "Legacy and case-insensitive hat IDs");
+        Check(!NativeHatIds.Matches("JesterHat") && !NativeHatIds.Matches("CombatHelmet01")
+            && !NativeHatIds.Matches(null), "Do not select a different headwear item");
 
         using var input = File.OpenRead(args[0]);
         using var pe = new PEReader(input);
@@ -65,6 +71,20 @@ internal static class Tests {
             var fields = Type(type).GetFields().Select(h => reader.GetString(reader.GetFieldDefinition(h).Name)).ToHashSet();
             foreach (var name in names) Check(fields.Contains(name), type + "." + name);
         }
+        using var constantsInput = File.OpenRead(Path.Combine(Path.GetDirectoryName(args[0]), "Game.Constants.dll"));
+        using var constantsPe = new PEReader(constantsInput);
+        var constantsReader = constantsPe.GetMetadataReader();
+        void Constant(string type, string field, string expected) {
+            var t = constantsReader.TypeDefinitions.Select(h => constantsReader.GetTypeDefinition(h))
+                .Single(d => constantsReader.GetString(d.Name) == type);
+            var f = t.GetFields().Select(h => constantsReader.GetFieldDefinition(h))
+                .Single(f => constantsReader.GetString(f.Name) == field);
+            var value = constantsReader.GetConstant(f.GetDefaultValue());
+            Check(System.Text.Encoding.Unicode.GetString(constantsReader.GetBlobBytes(value.Value)) == expected,
+                "Native compiled constant " + type + "." + field);
+        }
+        Constant("DefIds", "ObjEquipmentHatsHat01", NativeHatIds.Definition);
+        Constant("GraphicsId", "BeingsHatsHumanHat01Hat01", NativeHatIds.Sprite);
         Parameters("SpeciesLooksDef", "InitializeFor", "d");
         Parameters("BeingLooksComp", "BuildSpriteSetFor", "facing", "vertical");
         Parameters("EntityOverview_BeingManagement", "LoadContent", "ctx", "group", "gIdx");

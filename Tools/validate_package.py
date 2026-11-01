@@ -6,7 +6,7 @@ import struct
 
 root = pathlib.Path(__file__).resolve().parents[1]
 info = json.loads((root / 'ModInfo.json').read_text())
-assert info['Id'] == 'AnimalsWearHats' and info['ModVersion'] == '0.2.0'
+assert info['Id'] == 'AnimalsWearHats' and info['ModVersion'] == '0.2.1'
 assert (root / 'Libraries/AnimalsWearHats.dll').is_file(), 'Build DLL first'
 expected = {
     f'TopHat{pose}_{facing}.png'

@@ -16,7 +16,7 @@ using HarmonyLib;
 using KL.Utils;
 using UnityEngine;
 
-[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyVersion("0.2.1.0")]
 
 namespace AnimalsWearHats {
     public static class Boot {
@@ -31,7 +31,7 @@ namespace AnimalsWearHats {
                 harmony.CreateClassProcessor(typeof(RenderFitPatch)).Patch();
                 harmony.CreateClassProcessor(typeof(ManagementPatch)).Patch();
                 harmony.CreateClassProcessor(typeof(GameHatSpritePatch)).Patch();
-                D.Warn("[Animals Wear Hats] 0.2.0 prototype loaded");
+                D.Warn("[Animals Wear Hats] 0.2.1 prototype loaded");
             } catch (Exception error) {
                 harmony.UnpatchAll(HarmonyId);
                 D.Err("[Animals Wear Hats] Unsupported game API; prototype disabled: {0}", error);
@@ -69,7 +69,7 @@ namespace AnimalsWearHats {
         internal static AnimalFit Dog = new AnimalFit();
         internal static AnimalFit Cat = new AnimalFit { Scale = .25f,
             Down = new Vector2(0, -.08f), Up = new Vector2(0, .34f),
-            Left = new Vector2(-.30f, .16f), Right = new Vector2(.30f, .16f) };
+            Left = new Vector2(-.21f, .08f), Right = new Vector2(.21f, .08f) };
         internal static AnimalFit Pig = new AnimalFit { Scale = .34f,
             Down = new Vector2(0, -.12f), Up = new Vector2(0, .36f),
             Left = new Vector2(-.32f, .17f), Right = new Vector2(.32f, .17f) };
@@ -95,15 +95,18 @@ namespace AnimalsWearHats {
 
         internal static bool IsSupported(BeingData data) => SpeciesRules.Supports(data?.Species?.Id);
         internal static InventoryItemDef GameHat => InventoryItemDef.All.Values.FirstOrDefault(item =>
-            (item.Id == "Hat" || item.DefId == "Hat")
-            && item.SlotType?.LookPartType == LookPartTypeDef.Hat && item.SpriteId != null);
+            (NativeHatIds.Matches(item.Id) || NativeHatIds.Matches(item.DefId))
+            && (item.SlotId == InventorySlotId.Hat || item.SlotType?.LookPartType == LookPartTypeDef.Hat));
         internal static string GameHatSprite {
             get {
-                var source = GameHat?.SpriteId;
-                if (source == null) return null;
-                foreach (var variant in new[] { "N", "M", "F" }) {
-                    var candidate = source.Replace("BODY_TYPE", variant);
-                    if (RenderingService.Sprites.TryFind(candidate + "_D", out _)) return candidate;
+                // Prefer the installed item's definition, then the verified Core sprite ID.
+                // Item-table linking or a renamed inventory ID must not hide existing art.
+                foreach (var source in new[] { GameHat?.SpriteId, NativeHatIds.Sprite }) {
+                    if (string.IsNullOrEmpty(source)) continue;
+                    foreach (var variant in new[] { "N", "M", "F" }) {
+                        var candidate = source.Replace("BODY_TYPE", variant);
+                        if (RenderingService.Sprites.TryFind(candidate + "_D", out _)) return candidate;
+                    }
                 }
                 return null;
             }

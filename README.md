@@ -2,7 +2,7 @@
 
 A standalone cosmetic Stardeus mod by G33K3R-od. Special for Elisabeth.
 
-## 0.2.0 — Cats, pigs, original Hat and colors
+## 0.2.1 — Native Hat lookup and cat fitting fix
 
 Select a player-owned **dog, cat or pig**, open its management overview and find **Animals Wear Hats → Headwear**.
 
@@ -13,6 +13,8 @@ Select a player-owned **dog, cat or pig**, open its management overview and find
 
 These are cosmetic appearance choices: no physical Hat is consumed, no crafting recipe is added, and no stats change. A direct-control chip and g33kUI are not required. English and Russian are included.
 
+The original item is `Obj/Equipment/Hats/Hat01`, and its verified Core sprite base is `Beings/Hats/Human/Hat01/Hat01`. Both identifiers are checked against constants in the supplied Game.Constants.dll. The installed inventory definition is preferred, with the Core sprite path as a fallback.
+
 The native Hat's palette is used when available, with fallback color swatches otherwise. If the native Hat lacks an alternate walking or lying-down sprite, its regular sprite for the same direction is used; the selected accessory is not erased by the game's missing-sprite generator.
 
 ## Install
@@ -21,7 +23,7 @@ Extract the complete `AnimalsWearHats` folder from the runtime ZIP into the game
 
 ## Fitting and verification
 
-The player confirmed the dog's cylinder fitting in 0.1.1. Those scale and directional offsets are unchanged in 0.2.0. **Cat, pig and original Hat fitting are initial estimates and need in-game screenshots.** Hat rendering in portraits remains deferred.
+The player confirmed the dog's cylinder fitting in 0.1.1. Those scale and directional offsets are unchanged in 0.2.1. **Cat, pig and original Hat fitting are initial estimates and need in-game screenshots.** The cat cylinder side views now sit lower and closer to the head, based on player feedback. Hat rendering in portraits remains deferred.
 
 Each species has its own `DogFit.json`, `CatFit.json` or `PigFit.json`. Scale is relative to its body; Down/Left/Up/Right are world-coordinate offsets; LyingDown adds an extra offset when lying. GameHatScale and GameHatOffset affect only the original Hat, so its position can be adjusted without changing the cylinder. Restart after editing.
 
@@ -45,3 +47,7 @@ python Tools/package.py
 ```
 
 The output DLL is `Libraries/AnimalsWearHats.dll`. Regenerate original vector artwork with `python Tools/render_art.py` (requires PyMuPDF). Original game Hat graphics are resolved at runtime and are not copied into this repository or archive.
+
+## Steam Workshop
+
+SteamWorkshop is enabled in ModInfo.json. The complete English Workshop description is stored in DescriptionSteam; DoNotUpdateSteamDescription is false, so an upload from the game updates it. After your first upload, retain the generated SteamWorkshopItemId when replacing the local mod folder for future updates.
