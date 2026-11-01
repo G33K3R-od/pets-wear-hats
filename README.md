@@ -4,13 +4,13 @@ A standalone cosmetic mod for Stardeus, by G33K3R-od.
 
 Special for Elisabeth.
 
-## Prototype 0.1.0
+## Prototype 0.1.1
 
 Select a player-owned **dog**, open its management overview, and find **Animals Wear Hats → Headwear**. Choose **Top hat** or **Remove hat**. The accessory changes immediately; no direct-control chip is required. There is no g33kUI dependency.
 
 The prototype includes one original vector-drawn top hat, four directional sprites, an alternate walking frame and lying-down variants. It does not add crafting recipes, physical inventory items, armor or stat bonuses. Cats and other species are not supported yet.
 
-**Status:** compiled against the supplied Stardeus 0.15 managed assemblies. Automated API and persistence-path checks are available. Unity gameplay, visual fitting, click behavior and actual save/reload have **not** been verified here. Treat this as a first test build, not a Workshop-ready release.
+**Status:** compiled against the supplied Stardeus 0.15 managed assemblies. Automated API and persistence-path checks are available. Player screenshots confirm the first build renders the hat on a dog. Revised fitting, click behavior and actual save/reload have **not** been verified here. Treat this as a first test build, not a Workshop-ready release.
 
 ## Install the test build
 
@@ -22,11 +22,11 @@ The mod uses the game's existing `Hat` appearance layer and native serialized `B
 
 It refuses to overwrite another accessory's sprite or edit dogs whose inventory already has headwear equipment slots. It does not edit shared species definitions or patch human equipment. A compatibility check during startup disables all prototype patches together if a required game method cannot be patched.
 
-Hat persistence is implemented through the native save path, but a real save/reload and mod-disable test are still required. Use a separate test save for the first run. Native portraits intentionally omit `Hat` parts; portrait hats are **not included** in 0.1.0.
+Hat persistence is implemented through the native save path, but a real save/reload and mod-disable test are still required. Use a separate test save for the first run. Native portraits intentionally omit `Hat` parts; portrait hats are **not included** in 0.1.1.
 
 ## Fitting
 
-`DogFit.json` contains relative scale, four upright offsets and an additional lying offset. These are initial estimates because the supplied references do not contain the dog's original artwork. Values are in the renderer's world coordinates; they need an in-game screenshot for calibration. Restart after editing. Offsets are applied during native sprite-set construction and follow the dog's position filter and ambient movement.
+`DogFit.json` contains relative scale, four upright offsets and an additional lying offset. Version 0.1.1 reduces the hat to 62.5% of its original size and moves it toward the head, based on the first in-game screenshots. The revised positions still require in-game confirmation. Values are in the renderer's world coordinates; they need an in-game screenshot for calibration. Restart after editing. Offsets are applied during native sprite-set construction and follow the dog's position filter and ambient movement.
 
 ## Build
 

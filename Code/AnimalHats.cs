@@ -15,7 +15,7 @@ using HarmonyLib;
 using KL.Utils;
 using UnityEngine;
 
-[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.1.1.0")]
 
 namespace AnimalsWearHats {
     public static class Boot {
@@ -29,7 +29,7 @@ namespace AnimalsWearHats {
                 harmony.CreateClassProcessor(typeof(InitializeLooksPatch)).Patch();
                 harmony.CreateClassProcessor(typeof(RenderFitPatch)).Patch();
                 harmony.CreateClassProcessor(typeof(ManagementPatch)).Patch();
-                D.Warn("[Animals Wear Hats] 0.1.0 prototype loaded");
+                D.Warn("[Animals Wear Hats] 0.1.1 prototype loaded");
             } catch (Exception error) {
                 harmony.UnpatchAll(HarmonyId);
                 D.Err("[Animals Wear Hats] Unsupported game API; prototype disabled: {0}", error);
@@ -39,11 +39,11 @@ namespace AnimalsWearHats {
 
     [Serializable]
     public sealed class DogFit {
-        public float Scale = 0.48f;
-        public Vector2 Down = new Vector2(0f, 0.22f);
-        public Vector2 Left = new Vector2(-0.20f, 0.12f);
-        public Vector2 Up = new Vector2(0f, 0.10f);
-        public Vector2 Right = new Vector2(0.20f, 0.12f);
+        public float Scale = 0.30f;
+        public Vector2 Down = new Vector2(0f, -0.10f);
+        public Vector2 Left = new Vector2(-0.40f, 0.19f);
+        public Vector2 Up = new Vector2(0f, 0.43f);
+        public Vector2 Right = new Vector2(0.40f, 0.19f);
         public Vector2 LyingDown = new Vector2(0f, -0.08f);
         public Vector2 For(Facing.Type facing, bool vertical) {
             var offset = facing == Facing.Type.Left ? Left

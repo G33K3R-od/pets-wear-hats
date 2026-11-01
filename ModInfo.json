@@ -1,8 +1,8 @@
 {
   "Id": "AnimalsWearHats",
   "Name": "Животные носят шляпы",
-  "Description": "A cosmetic animal hat mod. Prototype 0.1.0 adds a selectable top hat for player-owned dogs. No g33kUI dependency. English and Russian included. In-game fitting and save/load verification are pending.",
-  "ModVersion": "0.1.0",
+  "Description": "A cosmetic animal hat mod. Prototype 0.1.1 adds a selectable top hat for player-owned dogs, with revised fitting from initial in-game screenshots. No g33kUI dependency. English and Russian included. Save/load and revised fitting verification are pending.",
+  "ModVersion": "0.1.1",
   "GameVersion": "0.15.0",
   "SteamWorkshop": false
 }

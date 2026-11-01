@@ -16,8 +16,8 @@ internal static class Tests {
     }
     private static void Main(string[] args) {
         Check(args.Length == 1, "Pass the supplied Game.dll path");
-        Check(FitMath.SafeScale(float.NaN) == .48f, "NaN scale fallback");
-        Check(FitMath.SafeScale(float.PositiveInfinity) == .48f, "Infinite scale fallback");
+        Check(FitMath.SafeScale(float.NaN) == .30f, "NaN scale fallback");
+        Check(FitMath.SafeScale(float.PositiveInfinity) == .30f, "Infinite scale fallback");
         Check(FitMath.SafeScale(-10f) == .05f, "Negative scale bounded");
         Check(FitMath.SafeScale(10f) == 2f, "Huge scale bounded");
         Check(FitMath.SafeScale(.6f) == .6f, "Valid fit preserved");
