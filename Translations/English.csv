@@ -5,3 +5,8 @@ awh.tophat,Top hat,1,First prototype hat
 awh.none,None,1,No hat selected
 awh.remove,Remove hat,1,Picker action
 awh.tip,A cosmetic accessory. No crafting or stat changes in this prototype.,1,Picker tooltip
+awh.gamehat,Hat (original game item),1,Hat and color selector
+awh.color,Color,1,Hat and color selector
+awh.original,Original colors,1,Hat and color selector
+awh.custom,Custom color (#RRGGBB),1,Hat and color selector
+awh.unavailable,The original Hat graphics are unavailable in this game installation.,1,Hat and color selector

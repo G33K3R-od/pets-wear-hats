@@ -1,59 +1,47 @@
 # Животные носят шляпы / Pets Wear Hats
 
-A standalone cosmetic mod for Stardeus, by G33K3R-od.
+A standalone cosmetic Stardeus mod by G33K3R-od. Special for Elisabeth.
 
-Special for Elisabeth.
+## 0.2.0 — Cats, pigs, original Hat and colors
 
-## Prototype 0.1.1
+Select a player-owned **dog, cat or pig**, open its management overview and find **Animals Wear Hats → Headwear**.
 
-Select a player-owned **dog**, open its management overview, and find **Animals Wear Hats → Headwear**. Choose **Top hat** or **Remove hat**. The accessory changes immediately; no direct-control chip is required. There is no g33kUI dependency.
+- **Top hat:** the mod's included cylinder.
+- **Hat (original game item):** uses the original Hat item definition and graphics loaded from the game. The selector shows an availability message if that item or its graphics cannot be resolved.
+- **Remove hat:** removes the accessory.
+- **Color:** choose a palette shade or enter your own six-digit RGB hex code, for example `#74B7DD`. Original colors restores white tint. The color applies to either hat and is retained when switching styles.
 
-The prototype includes one original vector-drawn top hat, four directional sprites, an alternate walking frame and lying-down variants. It does not add crafting recipes, physical inventory items, armor or stat bonuses. Cats and other species are not supported yet.
+These are cosmetic appearance choices: no physical Hat is consumed, no crafting recipe is added, and no stats change. A direct-control chip and g33kUI are not required. English and Russian are included.
 
-**Status:** compiled against the supplied Stardeus 0.15 managed assemblies. Automated API and persistence-path checks are available. Player screenshots confirm the first build renders the hat on a dog. Revised fitting, click behavior and actual save/reload have **not** been verified here. Treat this as a first test build, not a Workshop-ready release.
+The native Hat's palette is used when available, with fallback color swatches otherwise. If the native Hat lacks an alternate walking or lying-down sprite, its regular sprite for the same direction is used; the selected accessory is not erased by the game's missing-sprite generator.
 
-## Install the test build
+## Install
 
-Extract the `AnimalsWearHats` folder from the runtime ZIP into the game's user Mods directory. Enable **Животные носят шляпы** and restart Stardeus. Select a dog belonging to your colony.
+Extract the complete `AnimalsWearHats` folder from the runtime ZIP into the game's user Mods directory, replacing the previous version. Enable the mod and restart Stardeus.
 
-## Persistence and compatibility
+## Fitting and verification
 
-The mod uses the game's existing `Hat` appearance layer and native serialized `BeingLooks.Parts`. Its initializer adds a blank layer to dogs before native saved looks are restored. Selection is stored as a sprite ID on that layer; the mod writes no external per-animal preference files and creates no new serialized classes or look-part type IDs.
+The player confirmed the dog's cylinder fitting in 0.1.1. Those scale and directional offsets are unchanged in 0.2.0. **Cat, pig and original Hat fitting are initial estimates and need in-game screenshots.** Hat rendering in portraits remains deferred.
 
-It refuses to overwrite another accessory's sprite or edit dogs whose inventory already has headwear equipment slots. It does not edit shared species definitions or patch human equipment. A compatibility check during startup disables all prototype patches together if a required game method cannot be patched.
+Each species has its own `DogFit.json`, `CatFit.json` or `PigFit.json`. Scale is relative to its body; Down/Left/Up/Right are world-coordinate offsets; LyingDown adds an extra offset when lying. GameHatScale and GameHatOffset affect only the original Hat, so its position can be adjusted without changing the cylinder. Restart after editing.
 
-Hat persistence is implemented through the native save path, but a real save/reload and mod-disable test are still required. Use a separate test save for the first run. Native portraits intentionally omit `Hat` parts; portrait hats are **not included** in 0.1.1.
+## Saves and compatibility
 
-## Fitting
+The existing native `Hat` appearance layer stores the selected sprite ID and color through the game's serialized `BeingLooks.Parts`. A blank layer is added before the native saved-part restore, including for animals already in existing saves. No new serialized types, look-part IDs, inventory slots or per-animal preference files are introduced.
 
-`DogFit.json` contains relative scale, four upright offsets and an additional lying offset. Version 0.1.1 reduces the hat to 62.5% of its original size and moves it toward the head, based on the first in-game screenshots. The revised positions still require in-game confirmation. Values are in the renderer's world coordinates; they need an in-game screenshot for calibration. Restart after editing. Offsets are applied during native sprite-set construction and follow the dog's position filter and ambient movement.
+The mod does not edit shared species definitions or human equipment. It refuses to replace another accessory's sprite or edit an animal whose inventory already has headwear slots. All prototype Harmony patches are disabled together if a required method cannot be patched.
+
+The new native Hat, color persistence and the expanded species support have not been verified in a Unity gameplay session here. Test actual save/reload with two animals using different styles and colors, switching styles and removing hats, all four directions and sleep. On a copy of the save, test disabling/re-enabling the mod. Include Player.log if a selector or sprite is missing.
 
 ## Build
 
-Requires Python 3 and .NET SDK. The game's proprietary assemblies are not included.
+Requires Python 3, .NET SDK and your installed game's managed assemblies (not distributed).
 
 ```sh
 python build.py --managed-dir "/path/to/Stardeus_Data/Managed" --dotnet dotnet
 dotnet run --project Tests -- "/path/to/Stardeus_Data/Managed/Game.dll"
 python Tools/validate_package.py
+python Tools/package.py
 ```
 
-The output is `Libraries/AnimalsWearHats.dll`. Checked-in PNGs are ready to use. Regenerate them from the original SVGs with `python Tools/render_art.py` (requires PyMuPDF).
-
-## First in-game check
-
-1. Open an existing colony with a dog and locate the headwear selector.
-2. Equip and remove the cylinder repeatedly; check no duplicate buttons appear when reselecting the dog.
-3. Observe all four directions, walking, sleeping and changing animation speed.
-4. Save with a hat, restart and reload; repeat after removing it. Check two dogs retain separate selections.
-5. Check an unowned dog cannot be edited and humans, robots and other species remain unchanged.
-6. Check a copy of the save after disabling and re-enabling the mod; inspect `Player.log` for missing-sprite errors.
-
-## Next milestones
-
-- Calibrate dog fitting in the actual game.
-- Hats in animal portraits.
-- Cat fitting and additional hats.
-- Optional physical items, crafting and colonist dressing jobs.
-
-Project title: **Животные носят шляпы**. Repository slug: `pets-wear-hats`.
+The output DLL is `Libraries/AnimalsWearHats.dll`. Regenerate original vector artwork with `python Tools/render_art.py` (requires PyMuPDF). Original game Hat graphics are resolved at runtime and are not copied into this repository or archive.

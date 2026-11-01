@@ -5,3 +5,8 @@ awh.tophat,Цилиндр,1,Первая шляпа прототипа
 awh.none,Нет,1,Без шляпы
 awh.remove,Снять шляпу,1,Действие
 awh.tip,Косметический аксессуар. В этом прототипе нет изготовления и изменения характеристик.,1,Подсказка
+awh.gamehat,Hat (игровая шляпа),1,Hat and color selector
+awh.color,Цвет,1,Hat and color selector
+awh.original,Исходные цвета,1,Hat and color selector
+awh.custom,Свой цвет (#RRGGBB),1,Hat and color selector
+awh.unavailable,В этой установке игры недоступна графика предмета Hat.,1,Hat and color selector

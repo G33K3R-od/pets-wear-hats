@@ -26,6 +26,19 @@ internal static class Tests {
         Check(FitMath.SafeOffset(-10f) == -2f && FitMath.SafeOffset(10f) == 2f,
             "Offsets bounded in both directions");
         Check(FitMath.SafeOffset(-.2f) == -.2f, "Valid negative offset preserved");
+        Check(SpeciesRules.Supports("Dog") && SpeciesRules.Supports("Cat") && SpeciesRules.Supports("Pig"),
+            "Dogs, cats and pigs supported");
+        Check(!SpeciesRules.Supports("Human") && !SpeciesRules.Supports("Robot") && !SpeciesRules.Supports(null),
+            "Humans, robots and missing species excluded");
+        Check(ColorHex.Normalize(" #aa33ff ") == "#AA33FF", "Normalize custom color");
+        Check(ColorHex.Normalize("123456") == "#123456", "Hex without leading hash");
+        Check(ColorHex.Normalize("000000") == "#000000" && ColorHex.Normalize("FFFFFF") == "#FFFFFF", "Black and white");
+        foreach (var invalid in new[] { null, "", "#FFF", "#12345600", "#ZZZZZZ", "<color=red>", "#12 456" })
+            Check(ColorHex.Normalize(invalid) == null, "Reject invalid or transparent custom color");
+        Check(HatFrames.Poses(true, false).SequenceEqual(new[] { "" }), "Standing native hat frame");
+        Check(HatFrames.Poses(true, true).SequenceEqual(new[] { "_1", "" }), "Walking frame falls back to base");
+        Check(HatFrames.Poses(false, false).SequenceEqual(new[] { "_H", "" }), "Lying frame falls back to base");
+        Check(HatFrames.Poses(false, true).SequenceEqual(new[] { "_H", "" }), "Lying ignores alternate walking state");
 
         using var input = File.OpenRead(args[0]);
         using var pe = new PEReader(input);
@@ -55,13 +68,21 @@ internal static class Tests {
         Parameters("SpeciesLooksDef", "InitializeFor", "d");
         Parameters("BeingLooksComp", "BuildSpriteSetFor", "facing", "vertical");
         Parameters("EntityOverview_BeingManagement", "LoadContent", "ctx", "group", "gIdx");
-        Fields("BeingLooksComp", "SpriteSets", "SpriteSetsH", "Looks");
+        var spriteArguments = Method("BeingLooksComp", "GetFacingSprite").GetParameters()
+            .Select(h => reader.GetString(reader.GetParameter(h).Name)).ToArray();
+        Check(new[] { "part", "facing", "vertical", "ignoreColor" }.All(spriteArguments.Contains),
+            "Native hat resolver Harmony parameter bindings");
+        Fields("BeingLooksComp", "SpriteSets", "SpriteSetsH", "Looks", "isAltFrame");
+        Fields("InventoryItemDef", "All", "Id", "DefId", "SpriteId", "ColorGroupId", "SlotType");
         Fields("BeingLooks", "Parts", "NumParts");
         Fields("LookPart", "SpriteId", "Index", "Scale", "Offset", "PosFilter");
         Fields("BeingDataData", "Looks");
         var sprite = Type("LookPart").GetFields().Select(h => reader.GetFieldDefinition(h))
             .Single(f => reader.GetString(f.Name) == "SpriteId");
         Check(sprite.GetCustomAttributes().Count > 0, "Sprite ID retains native serialization annotation");
+        var savedColor = Type("LookPart").GetFields().Select(h => reader.GetFieldDefinition(h))
+            .Single(f => reader.GetString(f.Name) == "Color");
+        Check(savedColor.GetCustomAttributes().Count > 0, "Selected color retains native serialization annotation");
         var looks = Type("BeingDataData").GetFields().Select(h => reader.GetFieldDefinition(h))
             .Single(f => reader.GetString(f.Name) == "Looks");
         Check(looks.GetCustomAttributes().Count > 0, "Being appearance retains native serialization annotation");
