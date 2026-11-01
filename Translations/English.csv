@@ -1,0 +1,7 @@
+key,text,version,comment
+awh.title,Animals Wear Hats,1,Animal overview section
+awh.hat,Headwear,1,Hat picker label
+awh.tophat,Top hat,1,First prototype hat
+awh.none,None,1,No hat selected
+awh.remove,Remove hat,1,Picker action
+awh.tip,A cosmetic accessory. No crafting or stat changes in this prototype.,1,Picker tooltip

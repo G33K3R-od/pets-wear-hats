@@ -1,0 +1,6 @@
+Libraries/*.dll
+Tests/bin/
+Tests/obj/
+__pycache__/
+SteamWorkshopItemId
+*.zip
